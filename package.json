@@ -1,0 +1,29 @@
+{
+  "name": "meta-whatsapp-cloud-api-sdk",
+  "version": "1.0.0",
+  "description": "This is the SDK for simplifying messaging and webhooks for meta whatsapp cloud api.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoumyaRKN/META-WHATSAPP-CLOUD-API-SDK.git"
+  },
+  "keywords": [
+    "webhooks",
+    "messaging",
+    "whatsapp-messaging",
+    "meta",
+    "whatsapp-cloud-api",
+    "cloud",
+    "whatsapp-business",
+    "meta-whatsapp-business"
+  ],
+  "author": "Soumya Prakash Nayak (nsoumyaprakash@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoumyaRKN/META-WHATSAPP-CLOUD-API-SDK/issues"
+  },
+  "homepage": "https://github.com/SoumyaRKN/META-WHATSAPP-CLOUD-API-SDK#readme"
+}
