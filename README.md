@@ -248,3 +248,28 @@ whatsapp.downloadMedia(mediaId)
 // Verify webhook endpoint (Express.js example)
 app.get("/webhook", whatsapp.verifyWebhook);
 ```
+
+
+### Manage Templates
+```
+// Register template
+const response = await whatsapp.registerTemplate(name, components, category, allowCategoryChange, language);
+
+// Get templates
+const response = await whatsapp.getTemplates(query, fields, limit);
+
+// Get template Info
+const response = await whatsapp.getTemplateInfo(templateId);
+
+// Update template
+const response = await whatsapp.updateTemplate(templateId, category, components);
+
+// Delete template
+const response = await whatsapp.deleteTemplate(name, templateId);
+```
+
+### Validate WhatsApp Account Users or Contacts
+```
+// Validate contacts
+const response = await whatsapp.validateContacts(contacts, blocking, forceCheck);
+```
