@@ -1,6 +1,6 @@
 {
   "name": "meta-whatsapp-cloud-api-sdk",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "This is the SDK for simplifying messaging and webhooks for meta whatsapp cloud api.",
   "main": "index.js",
   "scripts": {

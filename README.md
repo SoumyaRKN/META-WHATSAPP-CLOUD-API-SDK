@@ -21,10 +21,11 @@ const Whatsapp = require('meta-whatsapp-cloud-api-sdk');
 
 const phoneNumberId = "your_phone_number_id";
 const accessToken = "your_access_token";
-const webhookVerifyToken = "your_webhook_verify_token"; // Optional, Add this if you wish to use Webhook
-const appVersion = "your_app_version"; // Optional, Default version is v19.0
+const appVersion = "your_app_version"; // Optional, Default version is v19.0.
+const accountId = "your_account_id"; // Optional, Add this if you wish to use Template Management.
+const webhookVerifyToken = "your_webhook_verify_token"; // Optional, Add this if you wish to use Webhook.
 
-const whatsapp = new Whatsapp(phoneNumberId, accessToken, webhookVerifyToken, appVersion);
+const whatsapp = new Whatsapp(phoneNumberId, accessToken, appVersion, accountId, webhookVerifyToken);
 
 ```
 

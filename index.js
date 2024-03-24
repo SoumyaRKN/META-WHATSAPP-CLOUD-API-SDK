@@ -3,14 +3,16 @@ class Whatsapp {
      * Create a new Whatsapp instance.
      * @param {String} phoneNumberId - The phone number ID associated with the Whatsapp account.
      * @param {String} accessToken - The access token for accessing the Whatsapp API.
-     * @param {String} [webhookVerifyToken=""] - The verification token for webhook endpoints (optional).
      * @param {String} [appVersion="v19.0"] - The version of the Whatsapp API to use (optional).
+     * @param {String} [accountId=""] - The whatsapp buseness account Id of the Whatsapp API to use (optional).
+     * @param {String} [webhookVerifyToken=""] - The verification token for webhook endpoints (optional).
      */
     constructor(phoneNumberId, accessToken, appVersion = "v19.0", accountId = "", webhookVerifyToken = "") {
         this.phoneNumberId = phoneNumberId;
         this.accessToken = accessToken;
-        this.webhookVerifyToken = webhookVerifyToken;
         this.appVersion = appVersion;
+        this.accountId = accountId;
+        this.webhookVerifyToken = webhookVerifyToken;
         this.baseUrl = `https://graph.facebook.com/${this.appVersion}/${this.phoneNumberId}`;
     };
 
@@ -18,7 +20,7 @@ class Whatsapp {
      * Make a HTTP request to the Whatsapp API.
      * @param {String} url - The URL of the API endpoint.
      * @param {String} method - The HTTP method (GET, POST, etc.).
-     * @param {Object} headers - The HTTP headers.
+     * @param {Object|null} headers - The HTTP headers (optional).
      * @param {Object|null} data - The data to send in the request body (optional).
      * @returns {Promise<Response>} - A promise resolving to the response object.
      */
@@ -347,9 +349,9 @@ class Whatsapp {
      * Register template in your meta whatsapp app.
      * @param {String} name  Template name (Maximum 512 characters. naming convention should be only in lowercase and underscore).
      * @param {Array of Objects} components  Components that make up the template. Reffer : https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#template-components
-     * @param {String} category  Template category (Allowed values : UTILITY, MARKETING, AUTHENTICATION), Default (UTILITY).
-     * @param {Boolean} allowCategoryChange  Set to true to allow META to automatically assign a category, Default (false).
-     * @param {String} language  Template language code, Default (en_US).
+     * @param {String} [category="UTILITY"]  Template category (Allowed values : UTILITY, MARKETING, AUTHENTICATION).
+     * @param {Boolean} [allowCategoryChange=false]  Set to true to allow META to automatically assign a category.
+     * @param {String} [language="en_US"]  Template language code.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async registerTemplate(name, components, category = "UTILITY", allowCategoryChange = false, language = "en_US") {
@@ -377,9 +379,9 @@ class Whatsapp {
 
     /**
      * Get a list of templates owned by the WhatsApp Business Account.
-     * @param {String} query  Filter templates by field, (Example : status=REJECTED).
-     * @param {String} fields  List of template fields you want returned, Default (name,status).
-     * @param {Number} limit  The maximum number of templates you want returned in each page of results, Default (name,status).
+     * @param {String} [query=""]  Filter templates by field, (Example : status=REJECTED).
+     * @param {String} [fields="name,status"]  List of template fields you want returned.
+     * @param {Number} [limit=0]  The maximum number of templates you want returned in each page of results.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async getTemplates(query = "", fields = "name,status", limit = 0) {
@@ -418,8 +420,8 @@ class Whatsapp {
     /**
      * Update template in your meta whatsapp app.
      * @param {String} templateId Whatsapp message template id.
-     * @param {String} category  Template category (Allowed values : UTILITY, MARKETING, AUTHENTICATION), Default (UTILITY).
-     * @param {Array of Objects} components  Components that make up the template, Default (Blank array). Reffer : https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#template-components
+     * @param {String} [category="UTILITY"]  Template category (Allowed values : UTILITY, MARKETING, AUTHENTICATION).
+     * @param {Array of Objects} [components=[]]  Components that make up the template. Reffer : https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#template-components
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async updateTemplate(templateId, category = "UTILITY", components = []) {
@@ -448,7 +450,7 @@ class Whatsapp {
     /**
      * Delete template in your meta whatsapp app.
      * @param {String} name  Whatsapp message template name.
-     * @param {String} templateId Whatsapp message template id (Optional, Required if you wish to delete a template by ID).
+     * @param {String} [templateId=""] Whatsapp message template id (Optional, Required if you wish to delete a template by ID).
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async deleteTemplate(name, templateId = "") {
@@ -469,8 +471,8 @@ class Whatsapp {
     /**
      * Validate whatsApp account users/contacts
      * @param {Array of Strings} contacts  Array of phone numbers that you wish to Validate.
-     * @param {Boolean} blocking  Whether the request should wait for processing to complete or not before returning a response, Default (false).
-     * @param {Boolean} force_check  Whether to check the contacts cache or not, Default (false).
+     * @param {Boolean} [blocking=false]  Whether the request should wait for processing to complete or not before returning a response.
+     * @param {Boolean} [forceCheck=false]  Whether to check the contacts cache or not.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async validateContacts(contacts, blocking = false, forceCheck = false) {
