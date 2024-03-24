@@ -1,13 +1,12 @@
 class Whatsapp {
-    /*
+    /**
      * Create a new Whatsapp instance.
-     * 
-     * @param {string} phoneNumberId - The phone number ID associated with the Whatsapp account.
-     * @param {string} accessToken - The access token for accessing the Whatsapp API.
-     * @param {string} [webhookVerifyToken=""] - The verification token for webhook endpoints (optional).
-     * @param {string} [appVersion="v19.0"] - The version of the Whatsapp API to use (optional).
+     * @param {String} phoneNumberId - The phone number ID associated with the Whatsapp account.
+     * @param {String} accessToken - The access token for accessing the Whatsapp API.
+     * @param {String} [webhookVerifyToken=""] - The verification token for webhook endpoints (optional).
+     * @param {String} [appVersion="v19.0"] - The version of the Whatsapp API to use (optional).
      */
-    constructor(phoneNumberId, accessToken, webhookVerifyToken = "", appVersion = "v19.0") {
+    constructor(phoneNumberId, accessToken, appVersion = "v19.0", accountId = "", webhookVerifyToken = "") {
         this.phoneNumberId = phoneNumberId;
         this.accessToken = accessToken;
         this.webhookVerifyToken = webhookVerifyToken;
@@ -15,11 +14,37 @@ class Whatsapp {
         this.baseUrl = `https://graph.facebook.com/${this.appVersion}/${this.phoneNumberId}`;
     };
 
-    /*
+    /**
+     * Make a HTTP request to the Whatsapp API.
+     * @param {String} url - The URL of the API endpoint.
+     * @param {String} method - The HTTP method (GET, POST, etc.).
+     * @param {Object} headers - The HTTP headers.
+     * @param {Object|null} data - The data to send in the request body (optional).
+     * @returns {Promise<Response>} - A promise resolving to the response object.
+     */
+    async makeRequest(url, method, headers = null, data = null) {
+        try {
+            const requestOptions = { method };
+
+            if (headers) {
+                requestOptions.headers = headers;
+            }
+
+            if (data) {
+                requestOptions.body = data;
+            }
+
+            return await fetch(url, requestOptions);
+        } catch (error) {
+            return error;
+        }
+    };
+
+    /**
      * Send a Whatsapp template message.
-     * @param {string} to - The recipient's phone number.
-     * @param {string} templateName - The name of the template to use.
-     * @param {string} [language="en_US"] - The language code for the template (optional).
+     * @param {String} to - The recipient's phone number.
+     * @param {String} templateName - The name of the template to use.
+     * @param {String} [language="en_US"] - The language code for the template (optional).
      * @param {Array} [header=[]] - An array of objects representing the header components of the template (optional).
      * @param {Array} [body=[]] - An array of objects representing the body components of the template (optional).
      * @param {Array} [buttons=[]] - An array of objects representing the button components of the template (optional).
@@ -68,7 +93,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.stringify(data));
+            }, JSON.Stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -77,10 +102,10 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Send a Whatsapp text message.
-     * @param {string} to - The recipient's phone number.
-     * @param {string} message - The text message to send.
+     * @param {String} to - The recipient's phone number.
+     * @param {String} message - The text message to send.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async sendMessage(to, message) {
@@ -100,7 +125,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.stringify(data));
+            }, JSON.Stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -109,11 +134,11 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Send a Whatsapp image message.
-     * @param {string} to - The recipient's phone number.
-     * @param {string} media - The URL or ID of the image to send.
-     * @param {string} [caption=""] - The caption for the image (optional).
+     * @param {String} to - The recipient's phone number.
+     * @param {String} media - The URL or ID of the image to send.
+     * @param {String} [caption=""] - The caption for the image (optional).
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async sendImage(to, media, caption = "") {
@@ -135,7 +160,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.stringify(data));
+            }, JSON.Stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -144,11 +169,11 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Send a Whatsapp video message.
-     * @param {string} to - The recipient's phone number.
-     * @param {string} media - The URL or ID of the video to send.
-     * @param {string} [caption=""] - The caption for the video (optional).
+     * @param {String} to - The recipient's phone number.
+     * @param {String} media - The URL or ID of the video to send.
+     * @param {String} [caption=""] - The caption for the video (optional).
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async sendVideo(to, media, caption = "") {
@@ -170,7 +195,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.stringify(data));
+            }, JSON.Stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -179,10 +204,10 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Send a Whatsapp audio message.
-     * @param {string} to - The recipient's phone number.
-     * @param {string} media - The URL or ID of the audio file to send.
+     * @param {String} to - The recipient's phone number.
+     * @param {String} media - The URL or ID of the audio file to send.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async sendAudio(to, media) {
@@ -204,7 +229,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.stringify(data));
+            }, JSON.Stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -213,12 +238,12 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Send a Whatsapp document message.
-     * @param {string} to - The recipient's phone number.
-     * @param {string} media - The URL or ID of the document to send.
-     * @param {string} [caption=""] - The caption for the document (optional).
-     * @param {string} [filename=""] - The filename of the document (optional).
+     * @param {String} to - The recipient's phone number.
+     * @param {String} media - The URL or ID of the document to send.
+     * @param {String} [caption=""] - The caption for the document (optional).
+     * @param {String} [filename=""] - The filename of the document (optional).
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async sendDocument(to, media, caption = "", filename = "") {
@@ -240,7 +265,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.stringify(data));
+            }, JSON.Stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -249,7 +274,7 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Upload media to be used in Whatsapp messages.
      * @param {Object} file - The file object to upload.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
@@ -276,9 +301,9 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Download media from Whatsapp messages.
-     * @param {string} mediaId - The ID of the media to download.
+     * @param {String} mediaId - The ID of the media to download.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
     async downloadMedia(mediaId) {
@@ -295,7 +320,7 @@ class Whatsapp {
         }
     };
 
-    /*
+    /**
      * Verify a Whatsapp webhook request.
      * @param {Object} req - The Express request object.
      * @param {Object} res - The Express response object.
@@ -318,28 +343,154 @@ class Whatsapp {
         }
     };
 
-    /*
-     * Make a HTTP request to the Whatsapp API.
-     * @param {string} url - The URL of the API endpoint.
-     * @param {string} method - The HTTP method (GET, POST, etc.).
-     * @param {Object} headers - The HTTP headers.
-     * @param {Object|null} data - The data to send in the request body (optional).
-     * @returns {Promise<Response>} - A promise resolving to the response object.
+    /**
+     * Register template in your meta whatsapp app.
+     * @param {String} name  Template name (Maximum 512 characters. naming convention should be only in lowercase and underscore).
+     * @param {Array of Objects} components  Components that make up the template. Reffer : https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#template-components
+     * @param {String} category  Template category (Allowed values : UTILITY, MARKETING, AUTHENTICATION), Default (UTILITY).
+     * @param {Boolean} allowCategoryChange  Set to true to allow META to automatically assign a category, Default (false).
+     * @param {String} language  Template language code, Default (en_US).
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
-    async makeRequest(url, method, headers, data = null) {
+    async registerTemplate(name, components, category = "UTILITY", allowCategoryChange = false, language = "en_US") {
         try {
-            const requestOptions = {
-                method: method,
-                headers: headers
+            const url = `${this.baseUrl.replace(this.phoneNumberId, this.accountId)}/message_templates`;
+            const data = {
+                "name": name,
+                "category": category.toUpperCase(),
+                "allow_category_change": allowCategoryChange,
+                "language": language,
+                "components": components
             };
 
-            if (data) {
-                requestOptions.body = data;
+            const response = await this.makeRequest(url, "POST", {
+                'Authorization': `Bearer ${this.accessToken}`,
+                'Content-Type': 'application/json'
+            }, JSON.Stringify(data));
+
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+
+    /**
+     * Get a list of templates owned by the WhatsApp Business Account.
+     * @param {String} query  Filter templates by field, (Example : status=REJECTED).
+     * @param {String} fields  List of template fields you want returned, Default (name,status).
+     * @param {Number} limit  The maximum number of templates you want returned in each page of results, Default (name,status).
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
+     */
+    async getTemplates(query = "", fields = "name,status", limit = 0) {
+        try {
+            const url = `${this.baseUrl.replace(this.phoneNumberId, this.accountId)}/message_templates?fields=${fields}${query ? `&${query}` : ""}${limit ? `&limit=${limit}` : ""}`;
+
+            const response = await this.makeRequest(url, "GET", {
+                'Authorization': `Bearer ${this.accessToken}`,
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+
+    /**
+     * Get a particular template information owned by the WhatsApp Business Account.
+     * @param {String} templateId Whatsapp message template id.
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
+     */
+    async getTemplateInfo(templateId) {
+        try {
+            const url = `${this.baseUrl.replace(this.phoneNumberId, templateId)}?access_token=${this.accessToken}`;
+
+            const response = await this.makeRequest(url, "GET");
+
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+
+    /**
+     * Update template in your meta whatsapp app.
+     * @param {String} templateId Whatsapp message template id.
+     * @param {String} category  Template category (Allowed values : UTILITY, MARKETING, AUTHENTICATION), Default (UTILITY).
+     * @param {Array of Objects} components  Components that make up the template, Default (Blank array). Reffer : https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/#template-components
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
+     */
+    async updateTemplate(templateId, category = "UTILITY", components = []) {
+        try {
+            const url = `${this.baseUrl.replace(this.phoneNumberId, templateId)}`;
+            const data = {
+                "category": category.toUpperCase(),
+            };
+
+            if (components.length > 0) {
+                data.components = components;
             }
 
-            return await fetch(url, requestOptions);
+            const response = await this.makeRequest(url, "POST", {
+                'Authorization': `Bearer ${this.accessToken}`,
+                'Content-Type': 'application/json'
+            }, JSON.Stringify(data));
+
+            return await response.json();
         } catch (error) {
-            return error;
+            console.error(error);
+            return null;
+        }
+    };
+
+    /**
+     * Delete template in your meta whatsapp app.
+     * @param {String} name  Whatsapp message template name.
+     * @param {String} templateId Whatsapp message template id (Optional, Required if you wish to delete a template by ID).
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
+     */
+    async deleteTemplate(name, templateId = "") {
+        try {
+            const url = `${this.baseUrl.replace(this.phoneNumberId, this.accountId)}/message_templates?${templateId ? `hsm_id=${templateId}&name=${name}` : `name=${name}`}`;
+
+            const response = await this.makeRequest(url, "DELETE", {
+                'Authorization': `Bearer ${this.accessToken}`
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+
+    /**
+     * Validate whatsApp account users/contacts
+     * @param {Array of Strings} contacts  Array of phone numbers that you wish to Validate.
+     * @param {Boolean} blocking  Whether the request should wait for processing to complete or not before returning a response, Default (false).
+     * @param {Boolean} force_check  Whether to check the contacts cache or not, Default (false).
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
+     */
+    async validateContacts(contacts, blocking = false, forceCheck = false) {
+        try {
+            const url = `${this.baseUrl.replace(this.phoneNumberId, "")}v1/contacts`;
+            const data = {
+                "blocking": blocking ? "wait" : "no_wait",
+                "contacts": contacts,
+                "force_check": forceCheck,
+            };
+
+            const response = await this.makeRequest(url, "POST", {
+                'Authorization': `Bearer ${this.accessToken}`,
+                'Content-Type': 'application/json'
+            }, JSON.Stringify(data));
+
+            return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
         }
     };
 };
