@@ -21,7 +21,7 @@ class Whatsapp {
      * @param {String} url - The URL of the API endpoint.
      * @param {String} method - The HTTP method (GET, POST, etc.).
      * @param {Object|null} headers - The HTTP headers (optional).
-     * @param {Object|null} data - The data to send in the request body (optional).
+     * @param {String|Object|null} data - The data to send in the request body (optional).
      * @returns {Promise<Response>} - A promise resolving to the response object.
      */
     async makeRequest(url, method, headers = null, data = null) {
@@ -95,7 +95,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -127,7 +127,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -162,7 +162,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -197,7 +197,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -231,7 +231,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -267,7 +267,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -368,7 +368,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -438,7 +438,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
@@ -487,7 +487,7 @@ class Whatsapp {
             const response = await this.makeRequest(url, "POST", {
                 'Authorization': `Bearer ${this.accessToken}`,
                 'Content-Type': 'application/json'
-            }, JSON.Stringify(data));
+            }, JSON.stringify(data));
 
             return await response.json();
         } catch (error) {
