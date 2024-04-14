@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 class Whatsapp {
     /**
      * Create a new Whatsapp instance.
@@ -5,13 +8,15 @@ class Whatsapp {
      * @param {String} accessToken - The access token for accessing the Whatsapp API.
      * @param {String} [appVersion="v19.0"] - The version of the Whatsapp API to use (optional).
      * @param {String} [accountId=""] - The whatsapp buseness account Id of the Whatsapp API to use (optional).
+     * @param {String} [appId=""] - The whatsapp buseness app Id of the Whatsapp API to use (optional).
      * @param {String} [webhookVerifyToken=""] - The verification token for webhook endpoints (optional).
      */
-    constructor(phoneNumberId, accessToken, appVersion = "v19.0", accountId = "", webhookVerifyToken = "") {
+    constructor(phoneNumberId, accessToken, appVersion = "v19.0", accountId = "", appId = "", webhookVerifyToken = "") {
         this.phoneNumberId = phoneNumberId;
         this.accessToken = accessToken;
         this.appVersion = appVersion;
         this.accountId = accountId;
+        this.appId = appId;
         this.webhookVerifyToken = webhookVerifyToken;
         this.baseUrl = `https://graph.facebook.com/${this.appVersion}/${this.phoneNumberId}`;
     };
@@ -475,6 +480,7 @@ class Whatsapp {
      * @param {Boolean} [forceCheck=false]  Whether to check the contacts cache or not.
      * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
      */
+    /*
     async validateContacts(contacts, blocking = false, forceCheck = false) {
         try {
             const url = `${this.baseUrl.replace(this.phoneNumberId, "")}v1/contacts`;
@@ -490,6 +496,41 @@ class Whatsapp {
             }, JSON.stringify(data));
 
             return await response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
+    */
+
+    /**
+     * 
+     * @param {Object} file - The file object to upload.
+     * @param {*} [fileOffset=0] - An integer that indicates the number of bytes that have been successfully uploaded Default 0.
+     * @returns {Promise<Object|null>} - A promise resolving to the response object if successful, or null if an error occurs.
+     */
+    async resumableUpload(file, fileOffset = 0) {
+        try {
+            const sessionUrl = `${this.baseUrl.replace(this.phoneNumberId, this.appId)}/uploads?file_length=${file.size}&file_type=${file.mimetype}&access_token=${this.accessToken}`;
+            const sessionResponse = await this.makeRequest(sessionUrl, "POST");
+            const sessionResponseJson = await sessionResponse.json();
+            const sessionId = sessionResponseJson?.id;
+
+            if (!sessionId) {
+                return null;
+            }
+
+            const uploadUrl = `${this.baseUrl.replace(this.phoneNumberId, sessionId)}`;
+            const formData = new FormData();
+            formData.append('file', fs.readFileSync(path.resolve(file.path)).toString("utf8"));
+
+            const uploadResponse = await this.makeRequest(uploadUrl, "POST", {
+                'Authorization': `OAuth ${this.accessToken}`,
+                'file_offset': fileOffset,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }, formData);
+
+            return await uploadResponse.json();
         } catch (error) {
             console.error(error);
             return null;
